@@ -13,4 +13,6 @@
 /debian/mpv.postrm.debhelper
 /debian/mpv.substvars
 /config/
-/*_options
+/venv
+/fdk-aac
+

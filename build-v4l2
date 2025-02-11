@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# V4L2 version 
+git clone https://github.com/jc-kynesim/rpi-ffmpeg.git
+cd ffmpeg
+git checkout release/5.1/main   ## v4l2m2m :: https://faint.day/blog/raspberry-pi-3-hardware-accelerated-video-playback/
+#git checkout test/5.1.6/main
+cd ..
+
+./update
+
+cd mpv
+git checkout release/0.38
+cd ..
+
+
+# DEPENDENCIES
+apt install -y meson autoconf libtool libfreetype6-dev libfribidi-dev libvdpau-dev libva-dev libxv-dev \
+    libjpeg-dev libxkbcommon-dev libxrandr-dev libv4l-dev libxss-dev libcaca-dev \
+    libx264-dev mesa-vulkan-drivers mesa-vdpau-drivers mesa-va-drivers mesa-utils libbluray-dev \
+    build-essential pkg-config cmake libharfbuzz-dev  libdrm-dev libmp3lame-dev \
+    libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libudev-dev librubberband-dev  libasound2-dev  libepoxy-dev
+
+# FDK-AAC
+git clone https://github.com/mstorsjo/fdk-aac.git
+cd fdk-aac
+autoreconf -fiv
+./configure --prefix=/usr/local --enable-shared --enable-static
+make -j$(nproc)
+make install
+ldconfig
+cd ..
+
+python3 -m venv venv
+. venv/bin/activate
+pip install meson ninja
+
+./build -j4
+
